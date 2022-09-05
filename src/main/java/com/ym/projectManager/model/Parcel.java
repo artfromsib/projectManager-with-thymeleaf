@@ -13,8 +13,9 @@ import java.util.stream.Collectors;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Parcel {
     @Id
-    @Column(name = "id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name = "parcel_id", nullable = false)
+    @SequenceGenerator(name = "parcel_id_seq", initialValue = 1, allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "parcel_id_seq")
     private Long parcelId;
     private String trackNumber;
     private String lastStatus;

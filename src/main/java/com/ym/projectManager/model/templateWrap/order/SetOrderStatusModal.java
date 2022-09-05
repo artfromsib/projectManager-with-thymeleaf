@@ -1,6 +1,7 @@
 package com.ym.projectManager.model.templateWrap.order;
 
 public class SetOrderStatusModal {
+
     private Long orderId;
     private String status;
     private String trackNum;

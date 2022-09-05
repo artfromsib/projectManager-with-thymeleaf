@@ -13,7 +13,6 @@ public class OrderTempl {
 
     private Order order;
     private List<Item> itemsOfOrder = new ArrayList<>();
-
     private Item newItem;
     private List<SelectItemsFromDB> itemsFromDB = new ArrayList<>();
     private String findByItemName;
@@ -38,7 +37,6 @@ public class OrderTempl {
         this.searchAnswerCustomer = searchAnswerCustomer;
     }
 
-
     public List<Item> getItemsOfOrder() {
         return itemsOfOrder;
     }
@@ -46,6 +44,7 @@ public class OrderTempl {
     public void setOrderItems(List<Item> items) {
         this.itemsOfOrder = items;
     }
+
     public Order getOrder() {
         return order;
     }
@@ -63,11 +62,12 @@ public class OrderTempl {
     }
 
     public OrderTempl() {
+
     }
 
     public List<Item> getSelectedItemsFromDB(){
         List <Item> selectedItemsFromDB = new ArrayList<>();
-        itemsFromDB.stream().filter(item -> item.isSelected() == true)
+        itemsFromDB.stream().filter(item -> item.isSelected())
                 .forEach(item->{selectedItemsFromDB.add(item.getItem());});
         return selectedItemsFromDB;
     }
@@ -76,28 +76,12 @@ public class OrderTempl {
         this.itemsOfOrder = itemsOfOrder;
     }
 
-   /* public void addItem(Item newItem) {
-        if(this.items == null) {
-            this.items = new HashSet<Item>(){{
-                add(newItem);
-            }};
-        } else {
-            this.items.add(newItem);
-        }
-
-    }*/
-
-
-
-
-
     public OrderTempl(Order order, List<Item> itemsOfOrder, Item item, Customer customer) {
         this.order = order;
         this.itemsOfOrder = itemsOfOrder;
         this.newItem = item;
         this.customer = customer;
     }
-
 
     public List<SelectItemsFromDB> getItemsFromDB() {
         return itemsFromDB;
@@ -116,10 +100,6 @@ public class OrderTempl {
         else this.itemsFromDB = new ArrayList<>();
 
     }
-
-
-
-
 
     public String getFindByItemName() {
         return findByItemName;
@@ -144,7 +124,6 @@ public class OrderTempl {
     public void setCustomer(Customer customer) {
         this.customer = customer;
     }
-
 
     public List<Customer> getCustomersFromDB() {
         return customersFromDB;

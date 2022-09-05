@@ -10,14 +10,14 @@ public class ItemSection {
 
     @Id
     @Column(name = "section_id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "section_id_seq", initialValue = 1, allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "section_id_seq")
     private Long itemSectionId;
     private String name;
 
     @OneToMany(mappedBy = "itemSection", fetch = FetchType.LAZY,
             cascade = CascadeType.PERSIST)
     private Set<Item> items;
-
 
     public ItemSection(Long ItemSectionId, String name, Set<Item> items) {
         this.itemSectionId = ItemSectionId;
@@ -37,7 +37,6 @@ public class ItemSection {
         this.itemSectionId = ItemSectionId;
         this.name = name;
     }
-
 
     public Long getItemSectionId() {
         return itemSectionId;

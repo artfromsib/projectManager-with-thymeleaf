@@ -11,20 +11,18 @@ import java.util.Set;
 @Entity
 @Table(name="customer", schema = "public")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-
 public class Customer {
     @Id
     @Column(name = "customer_id", nullable = false)
-
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-
+    @SequenceGenerator(name = "customer_id_seq", initialValue = 1, allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "customer_id_seq")
     private Long customerId;
-
     private Long userOtherId;
     @NotBlank
     private String fullName;
     private String address;
     private Integer countOrders = 1;
+
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
     private Set<Order> customerOrders = new HashSet<>();
 
@@ -99,7 +97,6 @@ public class Customer {
     public void setCustomerOrders(Set<Order> customerOrders) {
         this.customerOrders = customerOrders;
     }
-
 
     @Override
     public String toString() {

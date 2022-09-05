@@ -23,7 +23,6 @@ CREATE TABLE IF NOT EXISTS parcel
     id BIGSERIAL PRIMARY KEY,
     track_number VARCHAR(25) NOT NULL,
     last_status VARCHAR(254),
-    track_parcel_id BIGSERIAL REFERENCES track_parcel,
     delivered BOOLEAN DEFAULT FALSE
 );
 

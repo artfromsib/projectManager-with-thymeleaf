@@ -56,18 +56,18 @@ public class ParcelServiceImpl implements ParcelService {
 
     @Override
     public void updateParcelsTracking() {
-        SimpleDateFormat format1 = new SimpleDateFormat("dd.MM.yyyy");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
         StringBuilder requestData = new StringBuilder("[");
         Optional<Parcel> notDeliveredParcel = parcelRepository.findFirstByDeliveredIsFalseAndTrackNumberIsNotNullOrderByLastUpdateDesc();
         if (notDeliveredParcel.isPresent()) {
-            if (!format1.format(notDeliveredParcel.get().getLastUpdate())
-                    .equals(format1.format(new Date()))) {
+            if (!dateFormat.format(notDeliveredParcel.get().getLastUpdate())
+                    .equals(dateFormat.format(new Date()))) {
 
                 Set<Parcel> parcels = parcelRepository.findAllByDeliveredIsFalse();
                 if (parcels != null) {
-                    parcels.stream().forEach(parcel -> {
-                        requestData.append("{\"number\": \"" +
-                                parcel.getTrackNumber() + "\"},");
+                    parcels.forEach(parcel -> {
+                        requestData.append("{\"number\": \"");
+                        requestData.append(parcel.getTrackNumber() + "\"},");
                     });
 
                     requestData.deleteCharAt(requestData.length() - 1).append("]");
@@ -98,7 +98,7 @@ public class ParcelServiceImpl implements ParcelService {
                 String trackNum = parcel.getAsJsonObject().get("number").getAsString();
                 JsonObject track = parcel.getAsJsonObject().get("track").getAsJsonObject();
                 JsonObject lastStatJson = track.get("z0").getAsJsonObject();
-                Boolean delivered = track.get("e").toString().equals("40");
+                boolean delivered = track.get("e").toString().equals("40");
 
                 StringBuilder lastStatus = new StringBuilder(lastStatJson.get("a").getAsString()).append(", ");
                 lastStatus.append(lastStatJson.get("c").getAsString()).append(", ").append(lastStatJson.get("d").getAsString());
@@ -132,12 +132,15 @@ public class ParcelServiceImpl implements ParcelService {
     }
 
     private void saveParcel(Parcel parcel) {
+        try{
         parcel.setParcelId(parcelRepository.findFirstByTrackNumber(parcel.getTrackNumber()).getParcelId());
-        Set<TrackParcel> oldTrackParcel = trackParcelRepository.findAllByParcelOrderByTrackParcelIdDesc(parcel.getParcelId());
+        Set<TrackParcel> oldTrackParcel = trackParcelRepository.findAllByParcelParcelIdOrderByTrackParcelIdDesc(parcel.getParcelId());
         Set<TrackParcel> newTrackParcel = parcel.getTrackParcels();
         if (oldTrackParcel != null) {
             newTrackParcel.removeAll(oldTrackParcel);
         }
+
+
         if (newTrackParcel.size() > 0) {
             newTrackParcel.stream().sorted(new TrackParcelComparator().reversed()).forEach(status -> {
                 status.setParcel(parcel);
@@ -149,6 +152,9 @@ public class ParcelServiceImpl implements ParcelService {
         } else {
             parcel.setTrackParcels(oldTrackParcel);
             parcelRepository.saveAndFlush(parcel);
+        }
+        } catch (Exception e){
+            e.printStackTrace();
         }
 
     }

@@ -11,7 +11,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
-<form id="new-order" th:action="@{/order/tracking/delivered}" th:object="${parcel}" th:method="post" action="edit.html">
+<form id="new-order" th:action="@{/order/tracking/delivered}" th:object="${parcel}" th:method="post">
 <div class="list-group">
     <button type="submit" class="btn btn-primary" th:unless="${parcel.getDelivered()}" th:href="@{/order/tracking/delivered}"> Delivery</button>
 

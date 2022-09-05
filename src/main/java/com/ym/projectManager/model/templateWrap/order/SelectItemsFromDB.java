@@ -6,8 +6,8 @@ public class SelectItemsFromDB {
     public SelectItemsFromDB() {
     }
 
-    boolean selected = false;
-    Item item;
+    private boolean selected = false;
+    private Item item;
 
     public boolean isSelected() {
         return selected;

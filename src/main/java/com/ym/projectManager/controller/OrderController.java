@@ -4,6 +4,7 @@ package com.ym.projectManager.controller;
 import com.ym.projectManager.model.templateWrap.order.OrderTempl;
 import com.ym.projectManager.model.templateWrap.order.SetOrderStatusModal;
 import com.ym.projectManager.repository.CustomerRepository;
+import com.ym.projectManager.repository.ParcelRepository;
 import com.ym.projectManager.repository.SectionRepository;
 import com.ym.projectManager.service.ItemService;
 import com.ym.projectManager.service.OrderService;
@@ -30,6 +31,7 @@ public class OrderController {
     private final OrderService orderService;
     private final ItemService itemService;
     private final CustomerRepository customerRepository;
+    private final ParcelRepository parcelRepository;
     private final List<ItemSection> sections;
     private final TrackerService trackerService;
 
@@ -44,15 +46,16 @@ public class OrderController {
     }
 
     @Autowired
-    public OrderController(OrderService orderService, ItemService itemService, SectionRepository sectionRepository,
+    public OrderController(OrderService orderService, ItemService itemService, ParcelRepository parcelRepository, SectionRepository sectionRepository,
                            CustomerRepository customerRepository, TrackerService trackerService) {
         this.orderService = orderService;
         this.itemService = itemService;
+        this.parcelRepository = parcelRepository;
         this.customerRepository = customerRepository;
         this.sections = sectionRepository.findAll();
         this.trackerService = trackerService;
     }
-//-------------Main orders tab--------------//
+
     @GetMapping(value = "/new_orders_tab")
     public String listNewOrder(Model model) {
         final List<Order> orders = orderService.getOrdersByStatus(OrderStatus.NEW.toString());
@@ -79,9 +82,6 @@ public class OrderController {
         model.addAttribute("modal_status", new SetOrderStatusModal());
         model.addAttribute("status", OrderStatus.values());
     }
-//-------------End main orders tab--------------//
-
-//-------------Create, edit order page---------------//
 
 
     @GetMapping("/order")
@@ -173,24 +173,22 @@ public class OrderController {
         model.addAttribute("status", OrderStatus.values());
         model.addAttribute("sections", sections);
     }
-//-------------End create, edit order page---------------//
-
 
     @PostMapping(value = "/order/set_status")
     public String setOrderStatus(SetOrderStatusModal statusModal, Model model) {
         orderService.setOrderStatus(statusModal.getOrderId(), statusModal.getStatus());
+
         if (statusModal.getStatus().equals(OrderStatus.COMPLETE.toString())) {
             trackerService.registerParcelInTracker(statusModal.getTrackNum());
             orderService.addTrackNumberToOrderAndSaveParcel(statusModal.getOrderId(), statusModal.getTrackNum());
-
-
         }
+
         return "main/main";
     }
 
     @GetMapping(value = "/order/tracking")
-    public String orderTracking(@RequestParam(value = "order_id", required = false) Long orderId, Model model) {
-        Parcel parcel = orderService.getOrderById(orderId).get().getParcel();
+    public String orderTracking(@RequestParam(value = "parcel_id", required = false) Long parcelId, Model model) {
+        Parcel parcel = parcelRepository.getParcelByParcelId(parcelId);
         model.addAttribute("parcel", parcel);
         return "order_tracking";
     }

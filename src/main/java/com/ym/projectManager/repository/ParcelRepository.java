@@ -10,6 +10,7 @@ public interface ParcelRepository extends JpaRepository<Parcel, Long> {
     Optional<Parcel>  findFirstByDeliveredIsFalseAndTrackNumberIsNotNullOrderByLastUpdateDesc();
     Set<Parcel> findAllByDeliveredIsFalse();
     Parcel findFirstByTrackNumber(String trackNum);
+    Parcel getParcelByParcelId(Long parcelId);
 
 
 }

@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -55,7 +54,7 @@ class ItemServiceImplTest {
     void shouldSaveNewItemsWithoutSection() {
 
         doReturn(ITEM_RECORD_3)
-                .when(itemRepository).saveAndFlush(Mockito.any(Item.class));
+                .when(itemRepository).saveAndFlush(any(Item.class));
         Item newItem = new Item("gold shoes", 1, 4000.0, "IN_PROGRESS", null);
 
         var actualResult = itemService.createOrUpdateItem(newItem, Optional.ofNullable(null));
@@ -70,9 +69,9 @@ class ItemServiceImplTest {
     void shouldSaveNewItemsWithSection() {
 
         doReturn(SECTION_PANTS)
-                .when(sectionRepository).saveAndFlush(Mockito.any(ItemSection.class));
+                .when(sectionRepository).saveAndFlush(any(ItemSection.class));
         doReturn(ITEM_RECORD_2)
-                .when(itemRepository).saveAndFlush(Mockito.any(Item.class));
+                .when(itemRepository).saveAndFlush(any(Item.class));
 
         Item newItem = new Item("blue pants", 1, 3000.0, "READY", null);
 

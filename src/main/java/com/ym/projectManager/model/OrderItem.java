@@ -12,7 +12,8 @@ public class OrderItem {
 
     @Id
     @Column(name = "id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "order_item_id_seq", initialValue = 1, allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_item_id_seq")
     private Long orderItemId;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -62,8 +63,6 @@ public class OrderItem {
     public void setSumValue(Double sumValue) {
         this.sumValue = sumValue;
     }
-
-
 
     public Item getItem() {
         return item;

@@ -16,16 +16,15 @@ import java.util.Set;
 public class Order {
     @Id
     @Column(name = "order_id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "order_id_seq", initialValue = 1, allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_id_seq")
     private Long orderId;
     private LocalDateTime dateSale = LocalDateTime.now();
     private LocalDateTime datePosted;
     private Long etsyOrderId;
     private Integer orderValue;
-
     @Column(name = "ship_date")
     private LocalDateTime shippingDate;
-
     private Long couponId;
     private boolean useCoupon = false;
     private Double discountAmount;
@@ -43,7 +42,6 @@ public class Order {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parcel_id")
     private Parcel parcel;
-
 
     @NotNull
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
@@ -84,7 +82,6 @@ public class Order {
         this.status = status;
         this.orderItems = orderItems;
     }
-
 
     public Long getOrderId() {
         return orderId;

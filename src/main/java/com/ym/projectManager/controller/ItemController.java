@@ -50,18 +50,20 @@ public class ItemController {
     }
 
     @GetMapping(value = "")
-    public String listPage(Model model, @RequestParam("page") Optional<Integer> page, @RequestParam("totalPages") Optional<Integer> totalItems) {
+    public String listPage(Model model, @RequestParam("page") Optional<Integer> page, @RequestParam("totalPages") Optional<Integer> totalPages) {
+
+        Optional<Integer> amountPages = totalPages;
         int currentPage = page.orElse(1);
         Page<Item> itemPage;
 
-        if (totalItems.isEmpty()) {
+        if (amountPages.isEmpty()) {
             itemPage = itemService.getAllItemsPaginated(PageRequest.of(currentPage - 1, pageSize), 0);
-            totalItems = Optional.of((int) itemPage.getTotalElements());
+            amountPages = Optional.of((int) itemPage.getTotalElements());
         } else {
-            itemPage = itemService.getAllItemsPaginated(PageRequest.of(currentPage - 1, pageSize), totalItems.get());
+            itemPage = itemService.getAllItemsPaginated(PageRequest.of(currentPage - 1, pageSize), amountPages.get());
         }
         model.addAttribute("itemPage", itemPage);
-        initItemsTempl(model, totalItems, itemPage.getTotalPages(), Optional.empty());
+        initItemsTempl(model, amountPages, itemPage.getTotalPages(), Optional.empty());
         return "items";
     }
 
@@ -114,13 +116,13 @@ public class ItemController {
     @GetMapping("/new")
     public String newItem(Model model) {
         model.addAttribute("item", new Item());
-        return "edit";
+        return "item";
     }
 
     @GetMapping(CREATE_OR_UPDATE_ITEM)
     public String createOrUpdateItem(@RequestParam(value = "id", required = false) Optional<Long> optionalItemId, Model model) {
 
-        if (!optionalItemId.isEmpty()) {
+        if (optionalItemId.isPresent()) {
             model.addAttribute("item", itemService.getItemById(optionalItemId.get()).get());
 
         } else {
@@ -129,7 +131,7 @@ public class ItemController {
         }
         model.addAttribute("status", ItemStatus.values());
         model.addAttribute("sectionSelect", sectionRepository.findAll());
-        return "edit";
+        return "item";
     }
 
     @PostMapping(SAVE_ITEM)
@@ -142,7 +144,7 @@ public class ItemController {
     @GetMapping("/add_section")
     public String addSection(@PathVariable("section_name") String sectionName, Model model) {
         sectionRepository.saveAndFlush(new ItemSection(sectionName));
-        return "edit";
+        return "item";
     }
 
     @GetMapping("/add_section/{section_name}")
@@ -150,7 +152,7 @@ public class ItemController {
 
         ItemSection saved = sectionRepository.saveAndFlush(new ItemSection(section));
 
-        return "edit";
+        return "item";
     }
 
 

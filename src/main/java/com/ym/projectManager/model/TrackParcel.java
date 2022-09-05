@@ -12,7 +12,8 @@ import java.util.Objects;
 public class TrackParcel implements Comparable<TrackParcel>{
     @Id
     @Column( nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(name = "track_parcel_id_seq", initialValue = 1, allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "track_parcel_id_seq")
     private Long trackParcelId;
     private String status = "";
     private Date date;

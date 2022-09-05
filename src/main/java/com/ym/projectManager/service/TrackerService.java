@@ -110,34 +110,34 @@ public class TrackerService {
 
     }
 
-    public void updateTrackingParcel(){
-        SimpleDateFormat format1 = new SimpleDateFormat("dd.MM.yyyy");
+    public void updateTrackingParcel() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
         StringBuilder requestData = new StringBuilder("[");
         Optional<Parcel> notDeliveredParcel = parcelRepository.findFirstByDeliveredIsFalseAndTrackNumberIsNotNullOrderByLastUpdateDesc();
-        if (notDeliveredParcel.isPresent()) {
-            if (!format1.format(notDeliveredParcel.get().getLastUpdate())
-                    .equals(format1.format(new Date()))) {
 
-                Set<Parcel> parcels = parcelRepository.findAllByDeliveredIsFalse();
-                if (parcels != null) {
-                    parcels.stream().forEach(parcel -> {
-                        requestData.append("{\"number\": \"" +
-                                parcel.getTrackNumber() + "\"},");
-                    });
+        if (notDeliveredParcel.isPresent()
+                && (!dateFormat.format(notDeliveredParcel.get().getLastUpdate()).equals(dateFormat.format(new Date())))) {
 
-                    requestData.deleteCharAt(requestData.length() - 1).append("]");
-                    try {
-                        String result = new TrackerService(parcelRepository, trackParcelRepository).orderOnlineByJson(requestData.toString(), "getTrackInfo");
-                        JsonObject trackInfo = JsonParser.parseString(result).getAsJsonObject();
-                        parseJsonAndSaveData(trackInfo);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+            Set<Parcel> parcels = parcelRepository.findAllByDeliveredIsFalse();
+            if (parcels != null) {
+                parcels.stream().forEach(parcel -> {
+                    requestData.append("{\"number\": \"" +
+                            parcel.getTrackNumber() + "\"},");
+                });
+
+                requestData.deleteCharAt(requestData.length() - 1).append("]");
+                try {
+                    String result = new TrackerService(parcelRepository, trackParcelRepository).orderOnlineByJson(requestData.toString(), "getTrackInfo");
+                    JsonObject trackInfo = JsonParser.parseString(result).getAsJsonObject();
+                    parseJsonAndSaveData(trackInfo);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-
-
             }
+
+
         }
+
     }
 
     private void parseJsonAndSaveData(JsonObject trackInfo) {

@@ -5,7 +5,6 @@ import com.ym.projectManager.model.ItemSection;
 import com.ym.projectManager.repository.ItemRepository;
 import com.ym.projectManager.repository.SectionRepository;
 import com.ym.projectManager.service.ItemService;
-import net.bytebuddy.description.type.TypeList;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;

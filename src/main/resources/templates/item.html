@@ -41,7 +41,7 @@
 </nav>
 
 <!-- Item edition -->
-<form id="edit-form" th:action="@{/main/items/edit}" th:method="post" action="edit.html">
+<form id="edit-form" th:action="@{/main/items/edit}" th:method="post" action="item.html">
     <div th:if="${item.itemId == null}"><h1> Create New Item </h1></div>
     <div th:unless="${item.itemId == null}"><h1> Edit Item </h1></div>
     <h1>Item Info:</h1>

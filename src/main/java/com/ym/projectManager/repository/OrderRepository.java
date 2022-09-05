@@ -1,6 +1,7 @@
 package com.ym.projectManager.repository;
 
 import com.ym.projectManager.model.Order;
+import com.ym.projectManager.model.Parcel;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

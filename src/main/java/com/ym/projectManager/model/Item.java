@@ -14,7 +14,8 @@ import java.util.Set;
 public class Item {
     @Id
     @Column(name = "item_id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "item_id_seq", initialValue = 1, allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "item_id_seq")
     private Long itemId;
     private String name;
     private Integer quantity = 0;
@@ -24,13 +25,15 @@ public class Item {
     private String variations;
     private Long listingId;
 
-
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "section_id")
     private ItemSection itemSection = new ItemSection(0L, "null", null);
 
     @Transient
     private String tempSection;
+
+    @OneToMany(mappedBy = "item", fetch = FetchType.LAZY)
+    private Set<OrderItem> orderItems = new HashSet<>();
 
     public Item(Long itemId, String name, Integer quantity, Double price, String status, ItemSection itemSection) {
         this.itemId = itemId;
@@ -43,9 +46,6 @@ public class Item {
 
     public Item() {
     }
-
-    @OneToMany(mappedBy = "item", fetch = FetchType.LAZY)
-    private Set<OrderItem> orderItems = new HashSet<>();
 
     public Item(String name) {
         this.name = name;
@@ -63,7 +63,6 @@ public class Item {
         this.status = status;
         this.itemSection = itemSection;
     }
-
 
     public Long getItemId() {
         return itemId;

@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <title>Edit item</title>
+    <title>Edit order</title>
     <style type="text/css">
         body {
             padding: 50px;
@@ -41,13 +41,8 @@
 </nav>
 
 <!-- Order edition -->
-<form id="new-order" th:action="@{/main/order}" th:object="${order}" th:method="post" action="edit.html">
+<form id="new-order" th:action="@{/main/order}" th:object="${order}" th:method="post" action="item.html">
     <h1>Order Info:</h1>
-
-    <div class="row">
-        <label for="id-input">ID:</label>
-        <input id="id-input" type="text" readonly="readonly" th:field="*{order.orderId}" value="0"/>
-    </div>
 
     <div class="col-md-6">
         <label for="trackNum-input" class="form-label">Track number</label>
@@ -103,27 +98,13 @@
                     </td>
                     <td> <input class="invisible" th:field = "*{itemsOfOrder[__${stat.index}__].itemId}" th:value="*{itemsOfOrder[__${stat.index}__].itemId}" ></td>
 
-
-                    <!-- <div class="fw-bold" th:text="${item.quantity}">0</div>
-                    <img th:field="${item.urlImage}" height="150" alt="...">
-                    <small th:field="${item.name}"> </small>
-                    <small text=""> </small>
-
-                <span class="badge bg-primary rounded-pill" th:text="${item.quantity}">14</span>-->
-
                 </tr>
                 </tbody>
             </table>
         </div>
 
     </div>
-    <div class="row">
-        <label for="orderTotal-input">Name:</label>
-        <input id="orderTotal-input" type="number" th:value="${order.order.getOrderTotal()}" value=0.0/>
-    </div>
 
-
-    <!--<form id="new-item" th:object="${newOrder}" th:method="post" action="edit.html"> -->
     <div class="accordion" id="create-new-item-accordion">
         <div class="accordion-item">
             <h2 class="accordion-header" id="flush-headingOne">
@@ -368,14 +349,6 @@
 
 <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
 <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
-
-
-<!--<script>
-    $('.info__add').click(function() {
-        $ ("ol").append ("<li> Прилагаемый список элементов </ li>");
-
-    });
-</script> -->
 
 </body>
 </html>

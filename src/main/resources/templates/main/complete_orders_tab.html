@@ -38,7 +38,7 @@
         <a></a>
         <div class="d-grid gap-2 d-md-block">
             <a th:class="${order?.parcel?.getDelivered()}? 'badge bg-success rounded-pill' : 'badge bg-primary rounded-pill'"
-               th:href="@{/main/order/tracking(order_id=${order.orderId})}" th:text="${order?.parcel?.getTrackNumber()}"> </a>
+               th:href="@{/main/order/tracking(parcel_id=${order.getParcel().getParcelId()})}" th:text="${order?.parcel?.getTrackNumber()}"> </a>
             <a class="mb-1">Shipping date:</a>
             <a class="mb-1" th:text="${order?.getShippingDateFormat()}"></a>
 
