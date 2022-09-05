@@ -11,6 +11,7 @@ import com.ym.projectManager.repository.ParcelRepository;
 import com.ym.projectManager.repository.TrackParcelRepository;
 import com.ym.projectManager.service.ParcelService;
 import com.ym.projectManager.service.TrackerService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -21,6 +22,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @Service
+@RequiredArgsConstructor
 public class ParcelServiceImpl implements ParcelService {
     private final ParcelRepository parcelRepository;
     private final TrackParcelRepository trackParcelRepository;
@@ -48,10 +50,9 @@ public class ParcelServiceImpl implements ParcelService {
 
     }
 
-    public ParcelServiceImpl(ParcelRepository parcelRepository, TrackParcelRepository trackParcelRepository, TrackerService trackerService) {
-        this.parcelRepository = parcelRepository;
-        this.trackParcelRepository = trackParcelRepository;
-        this.trackerService = trackerService;
+    @Override
+    public Parcel getParcel(long id){
+        return parcelRepository.getParcelByParcelId(id);
     }
 
     @Override
@@ -139,7 +140,6 @@ public class ParcelServiceImpl implements ParcelService {
         if (oldTrackParcel != null) {
             newTrackParcel.removeAll(oldTrackParcel);
         }
-
 
         if (newTrackParcel.size() > 0) {
             newTrackParcel.stream().sorted(new TrackParcelComparator().reversed()).forEach(status -> {

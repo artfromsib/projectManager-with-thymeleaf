@@ -13,13 +13,13 @@ public interface ItemService {
 
     Item createOrUpdateItem(Item item, Optional<String> newSection);
 
-
     List<Item> getAllItems();
-
 
     Optional<Item> getItemById(Long id);
 
     List<Item> getItemsBySection(Long sectionId);
+
+    ItemSection saveItemSection(ItemSection itemSection);
 
     List<Item> getItemsByName(String name);
 

@@ -5,6 +5,7 @@ import com.ym.projectManager.model.ItemSection;
 import com.ym.projectManager.repository.ItemRepository;
 import com.ym.projectManager.repository.SectionRepository;
 import com.ym.projectManager.service.ItemService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -17,17 +18,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class ItemServiceImpl implements ItemService {
 
     private final ItemRepository itemRepository;
     private final SectionRepository sectionRepository;
     private final int pageSize = 15;
-
-    public ItemServiceImpl(ItemRepository itemRepository, SectionRepository sectionRepository) {
-        this.itemRepository = itemRepository;
-        this.sectionRepository = sectionRepository;
-
-    }
 
     @Override
     public Item createOrUpdateItem(Item item, Optional<String> newSection) {
@@ -35,14 +31,12 @@ public class ItemServiceImpl implements ItemService {
             ItemSection save = sectionRepository.saveAndFlush(new ItemSection(newSection.get()));
             item.setItemSection(save);
         }
-
         return itemRepository.saveAndFlush(item);
     }
 
     @Override
     public List<Item> getAllItems() {
-        List<Item> items = itemRepository.findAll();
-        return items;
+        return itemRepository.findAll();
     }
 
     @Override
@@ -66,7 +60,7 @@ public class ItemServiceImpl implements ItemService {
         if (addSection && addStatus) {
             if (totalItems == 0) {
                 totalItems = itemRepository.countItemByItemSection_ItemSectionIdAndStatus(selectedSectionId, selectedStatus);
-                if(totalItems == 0)
+                if (totalItems == 0)
                     return new PageImpl<Item>(Collections.emptyList(), PageRequest.of(currentPage, pageSize), totalItems);
             }
             final List<Item> items = itemRepository.findItemsByItemSection_ItemSectionIdAndStatus(selectedSectionId, selectedStatus, request).get();
@@ -98,17 +92,18 @@ public class ItemServiceImpl implements ItemService {
             totalItems = (int) itemRepository.count();
         }
         PageRequest request = PageRequest.of(currentPage, pageSize, Sort.by(Sort.Direction.ASC, "itemId"));
-        final Page <Item> items = itemRepository.findAll(request);
-        if (items == null) {
-            return null;
-        } else {
-            return new PageImpl<Item>(items.toList(), PageRequest.of(currentPage, pageSize), totalItems);
-        }
+        final Page<Item> items = itemRepository.findAll(request);
+        return (items == null) ? null : new PageImpl<Item>(items.toList(), PageRequest.of(currentPage, pageSize), totalItems);
     }
 
     @Override
     public List<Item> getItemsBySection(Long sectionId) {
         return itemRepository.findItemsByItemSection_ItemSectionId(sectionId);
+    }
+
+    @Override
+    public ItemSection saveItemSection(ItemSection itemSection){
+        return sectionRepository.saveAndFlush(itemSection);
     }
 
     @Override
@@ -122,6 +117,5 @@ public class ItemServiceImpl implements ItemService {
                 .orElseThrow(() ->
                         new NotFoundException(String.format("Item with \"%s\" doesn't exist.", id)));
     }
-
 
 }

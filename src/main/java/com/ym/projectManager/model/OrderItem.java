@@ -1,10 +1,17 @@
 package com.ym.projectManager.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
-
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 @Entity(name="OrderItemEntity")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Table(name="order_item")
@@ -35,59 +42,6 @@ public class OrderItem {
         this.price = price;
         this.sumValue = sumValue;
     }
-
-    public OrderItem() {
-
-    }
-
-    public Long getOrderItemId() {
-        return orderItemId;
-    }
-
-    public void setOrderItemId(Long id) {
-        this.orderItemId = id;
-    }
-
-    public Integer getCount() {
-        return count;
-    }
-
-    public void setCount(Integer count) {
-        this.count = count;
-    }
-
-    public Double getSumValue() {
-        return sumValue;
-    }
-
-    public void setSumValue(Double sumValue) {
-        this.sumValue = sumValue;
-    }
-
-    public Item getItem() {
-        return item;
-    }
-
-    public Order getOrder() {
-        return order;
-    }
-
-    public void setItem(Item item) {
-        this.item = item;
-    }
-
-    public void setOrder(Order order) {
-        this.order = order;
-    }
-    public Double getPrice() {
-        return price;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
-    }
-
-
 
 
 }

@@ -5,6 +5,7 @@ package com.ym.projectManager.service.impl;
 import com.ym.projectManager.repository.*;
 import com.ym.projectManager.service.OrderService;
 import com.ym.projectManager.model.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
@@ -15,21 +16,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Service
+@RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
     private final ItemRepository itemRepository;
     private final CustomerRepository customerRepository;
     private final ParcelRepository parcelRepository;
-
-    public OrderServiceImpl(OrderRepository orderRepository, OrderItemRepository orderItemRepository, ItemRepository itemRepository, CustomerRepository customerRepository,
-                            ParcelRepository parcelRepository) {
-        this.orderRepository = orderRepository;
-        this.orderItemRepository = orderItemRepository;
-        this.itemRepository = itemRepository;
-        this.customerRepository = customerRepository;
-        this.parcelRepository = parcelRepository;
-    }
 
     @Override
     public Order saveOrderWithItemsCustomerAndParcel(Order order, List<Item> items, Customer customer) {
